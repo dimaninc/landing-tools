@@ -1,0 +1,13 @@
+{
+  "name": "landing-tools",
+  "version": "1.0.0",
+  "description": "Frontend landing tools",
+  "main": "index.js",
+  "repository": "git@github.com:dimaninc/landing-tools.git",
+  "author": "Dmitry Petrov <dimaninc@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "zepto": "^1.2.0"
+  }
+}
