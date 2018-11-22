@@ -4,7 +4,7 @@ class ScrollAppear
         @options = $.extend
             selector: '[data-scroll-appear]'
             selectorSuffixForNonAppeared: null # if finish is a string then it becomes ':not(.appeared)'
-            onFinish: 'appeared' # if string then a class name added
+            onFinish: 'scroll-appeared' # if string then a class name added
             #onFinish: ($e) -> $e.attr('data-scroll-appeared', 'true').data 'scroll-appeared', true
             windowHeightFactor: 1.5
             delayAttr: 'data-appear-delay'

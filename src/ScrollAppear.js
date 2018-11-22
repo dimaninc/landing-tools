@@ -8,7 +8,7 @@
       this.options = $.extend({
         selector: '[data-scroll-appear]',
         selectorSuffixForNonAppeared: null,
-        onFinish: 'appeared',
+        onFinish: 'scroll-appeared',
         windowHeightFactor: 1.5,
         delayAttr: 'data-appear-delay',
         eventClass: '.scrollappear'
