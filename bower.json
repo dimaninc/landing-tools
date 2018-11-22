@@ -1,0 +1,21 @@
+{
+  "name": "landing-tools",
+  "description": "Frontend landing tools",
+  "main": "index.js",
+  "authors": [
+    "Dmitry Petrov <dimaninc@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "landing",
+    "animations"
+  ],
+  "homepage": "https://github.com/dimaninc/landing-tools",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
