@@ -1,4 +1,5 @@
-.scroll-appear-text {
+.scroll-appear .scroll-appear-simple,
+[data-scroll-appear] .scroll-appear-simple {
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -14,7 +15,8 @@
   transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1), transform 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
   will-change: opacity, transform;
 }
-.scroll-appear-bg {
+.scroll-appear .scroll-appear-bg,
+[data-scroll-appear] .scroll-appear-bg {
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -25,8 +27,10 @@
   transition: opacity 0.5s ease;
   will-change: opacity;
 }
-.scroll-appear-from-left,
-.scroll-appear-from-right {
+.scroll-appear .scroll-appear-from-left,
+[data-scroll-appear] .scroll-appear-from-left,
+.scroll-appear .scroll-appear-from-right,
+[data-scroll-appear] .scroll-appear-from-right {
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -42,14 +46,16 @@
   transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1), transform 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
   will-change: opacity, transform;
 }
-.scroll-appear-from-right {
+.scroll-appear .scroll-appear-from-right,
+[data-scroll-appear] .scroll-appear-from-right {
   -webkit-transform: translateX(50%);
   -moz-transform: translateX(50%);
   -o-transform: translateX(50%);
   -ms-transform: translateX(50%);
   transform: translateX(50%);
 }
-.scroll-appeared .scroll-appear-text {
+.scroll-appeared .scroll-appear-simple,
+[data-scroll-appeared="true"] .scroll-appear-simple {
   opacity: 1;
   -ms-filter: none;
   filter: none;
@@ -59,13 +65,16 @@
   -ms-transform: translateY(0);
   transform: translateY(0);
 }
-.scroll-appeared .scroll-appear-bg {
+.scroll-appeared .scroll-appear-bg,
+[data-scroll-appeared="true"] .scroll-appear-bg {
   opacity: 1;
   -ms-filter: none;
   filter: none;
 }
 .scroll-appeared .scroll-appear-from-left,
-.scroll-appeared .scroll-appear-from-right {
+[data-scroll-appeared="true"] .scroll-appear-from-left,
+.scroll-appeared .scroll-appear-from-right,
+[data-scroll-appeared="true"] .scroll-appear-from-right {
   opacity: 1;
   -ms-filter: none;
   filter: none;
