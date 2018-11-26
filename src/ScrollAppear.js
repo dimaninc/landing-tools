@@ -10,25 +10,61 @@ ScrollAppear = (function() {
       onFinish: null,
       windowHeightFactor: 1.5,
       delayAttr: 'data-appear-delay',
-      eventClass: '.scrollappear'
+      eventClass: '.scrollappear',
+      transitionTime: 500
     }, options);
     this.count = this.getElements().length;
     this.countLoaded = 0;
-    this.setupDelays().go().worker();
+    this.cssClasses = {};
+    this.setupDelays().go();
+    setTimeout((function(_this) {
+      return function() {
+        return _this.worker();
+      };
+    })(this), 10);
   }
 
   ScrollAppear.prototype.setupDelays = function() {
-    var self;
+    var self, styles;
     self = this;
     $('[' + this.options.delayAttr + ']').each(function() {
       var $e;
       $e = $(this);
-      $e.css({
-        'transition-delay': $e.attr(self.options.delayAttr)
-      });
+      $e.addClass(self.getDelayCssClassName($e));
       return true;
     });
+    styles = $.map(this.cssClasses, function(value, className) {
+      return "." + className + "{" + value + "!important}";
+    });
+    $('head').append('<style type="text/css">' + styles.join('\n') + '</style>');
     return this;
+  };
+
+  ScrollAppear.prototype.getElementDelay = function($e) {
+    return this.parseDelay($e.attr(this.options.delayAttr));
+  };
+
+  ScrollAppear.prototype.parseDelay = function(delay) {
+    if (!delay) {
+      return 0;
+    }
+    if (delay.slice(-2) === 'ms') {
+      delay = parseInt(delay);
+    } else {
+      delay = 1000 * parseFloat('0' + delay);
+    }
+    return delay;
+  };
+
+  ScrollAppear.prototype.getDelayCssClassName = function($e) {
+    var delay, name, value;
+    delay = this.getElementDelay($e);
+    name = 'sa--td-' + delay;
+    if (delay && !this.cssClasses[name]) {
+      value = delay + 'ms !important;';
+      this.cssClasses[name] = '-webkit-transition-delay:' + value + '-moz-transition-delay:' + value + 'transition-delay:' + value;
+    }
+    return name;
   };
 
   ScrollAppear.prototype.go = function() {
@@ -56,17 +92,29 @@ ScrollAppear = (function() {
     return $(this.getFullSelector());
   };
 
-  ScrollAppear.prototype.finishElement = function($e) {
-    var defaultFinish, finish;
+  ScrollAppear.prototype.finishElement = function($wrapper) {
+    var defaultFinish, finish, self;
+    self = this;
     defaultFinish = function($el) {
       return $el.attr('data-scroll-appeared', 'true').data('scroll-appeared', true);
     };
     if (typeof this.options.onFinish === 'string') {
-      $e.addClass(this.options.onFinish);
+      $wrapper.addClass(this.options.onFinish);
     } else {
       finish = this.options.onFinish || defaultFinish;
-      finish($e);
+      finish($wrapper);
     }
+    $wrapper.find('[' + this.options.delayAttr + ']').each(function() {
+      var $e, className, delay;
+      $e = $(this);
+      delay = self.getElementDelay($e);
+      className = self.getDelayCssClassName($e);
+      return setTimeout((function(_this) {
+        return function() {
+          return $e.removeClass(className);
+        };
+      })(this), delay + self.options.transitionTime + 10);
+    });
     return this;
   };
 
@@ -88,10 +136,10 @@ ScrollAppear = (function() {
     self = this;
     scrollBreakPoint = this.window.scrollTop() + this.window.height() / this.options.windowHeightFactor;
     this.getElements().each(function() {
-      var $e;
-      $e = $(this);
-      if (scrollBreakPoint >= $e.offset().top) {
-        self.finishElement($e);
+      var $wrapper;
+      $wrapper = $(this);
+      if (scrollBreakPoint >= $wrapper.offset().top) {
+        self.finishElement($wrapper);
         return self.stepDone();
       }
     });

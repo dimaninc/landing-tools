@@ -8,22 +8,50 @@ class ScrollAppear
             windowHeightFactor: 1.5
             delayAttr: 'data-appear-delay' # attribute to watch for delay appear
             eventClass: '.scrollappear' # class added to events
+            transitionTime: 500 # ms
         , options
         @count = @getElements().length
         @countLoaded = 0
+        @cssClasses = {}
 
         @setupDelays()
         .go()
-        .worker()
+
+        setTimeout =>
+            @worker()
+        , 10
 
     setupDelays: ->
         self = @
         $ '[' + @options.delayAttr + ']'
         .each ->
             $e = $ @
-            $e.css 'transition-delay': $e.attr self.options.delayAttr
+            $e.addClass self.getDelayCssClassName $e
             true
+        styles = $.map @cssClasses, (value, className) -> ".#{className}{#{value}!important}"
+        $('head').append '<style type="text/css">' + styles.join('\n') + '</style>'
         @
+
+    getElementDelay: ($e) -> @parseDelay $e.attr @options.delayAttr
+
+    parseDelay: (delay) ->
+        return 0 unless delay
+        if delay.slice(-2) is 'ms'
+            delay = parseInt delay
+        else
+            delay = 1000 * parseFloat '0' + delay
+        delay
+
+    getDelayCssClassName: ($e) ->
+        delay = @getElementDelay $e
+        name = 'sa--td-' + delay
+        if delay and not @cssClasses[name]
+            value = delay + 'ms !important;'
+            @cssClasses[name] = '-webkit-transition-delay:' + value +
+                '-moz-transition-delay:' + value +
+                'transition-delay:' + value
+
+        name
 
     go: ->
         @window.on 'scroll' + @options.eventClass, => @worker()
@@ -39,14 +67,26 @@ class ScrollAppear
 
     getElements: -> $ @getFullSelector()
 
-    finishElement: ($e) ->
+    finishElement: ($wrapper) ->
+        self = @
         defaultFinish = ($el) -> $el.attr('data-scroll-appeared', 'true').data 'scroll-appeared', true
 
         if typeof @options.onFinish is 'string'
-            $e.addClass @options.onFinish
+            $wrapper.addClass @options.onFinish
         else
             finish = @options.onFinish or defaultFinish
-            finish $e
+            finish $wrapper
+
+        $wrapper
+            .find '[' + @options.delayAttr + ']'
+            .each ->
+                $e = $ @
+                delay = self.getElementDelay $e
+                className = self.getDelayCssClassName $e
+                setTimeout =>
+                    $e.removeClass className
+                , delay + self.options.transitionTime + 10
+
         @
 
     stepDone: ->
@@ -62,8 +102,8 @@ class ScrollAppear
         self = @
         scrollBreakPoint = @window.scrollTop() + @window.height() / @options.windowHeightFactor
         @getElements().each ->
-            $e = $ @
-            if scrollBreakPoint >= $e.offset().top
-                self.finishElement $e
+            $wrapper = $ @
+            if scrollBreakPoint >= $wrapper.offset().top
+                self.finishElement $wrapper
                 self.stepDone()
         @
