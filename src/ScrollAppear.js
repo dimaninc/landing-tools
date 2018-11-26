@@ -93,7 +93,7 @@ ScrollAppear = (function() {
   };
 
   ScrollAppear.prototype.finishElement = function($wrapper) {
-    var defaultFinish, finish, self;
+    var defaultFinish, finish, maxDelay, self;
     self = this;
     defaultFinish = function($el) {
       return $el.attr('data-scroll-appeared', 'true').data('scroll-appeared', true);
@@ -104,17 +104,24 @@ ScrollAppear = (function() {
       finish = this.options.onFinish || defaultFinish;
       finish($wrapper);
     }
+    maxDelay = 0;
     $wrapper.find('[' + this.options.delayAttr + ']').each(function() {
       var $e, className, delay;
       $e = $(this);
       delay = self.getElementDelay($e);
       className = self.getDelayCssClassName($e);
+      delay > maxDelay && (maxDelay = delay);
       return setTimeout((function(_this) {
         return function() {
-          return $e.removeClass(className);
+          return $e.removeClass(className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right').removeAttr(self.options.delayAttr);
         };
       })(this), delay + self.options.transitionTime + 10);
     });
+    setTimeout((function(_this) {
+      return function() {
+        return $wrapper.removeClass('scroll-appeared scroll-appear').removeAttr('data-scroll-appear data-scroll-appeared');
+      };
+    })(this), maxDelay + self.options.transitionTime + 10);
     return this;
   };
 

@@ -77,15 +77,28 @@ class ScrollAppear
             finish = @options.onFinish or defaultFinish
             finish $wrapper
 
+        maxDelay = 0
+
+        # removing classes and attributes from child elements
         $wrapper
             .find '[' + @options.delayAttr + ']'
             .each ->
                 $e = $ @
                 delay = self.getElementDelay $e
                 className = self.getDelayCssClassName $e
+                delay > maxDelay and maxDelay = delay
                 setTimeout =>
-                    $e.removeClass className
+                    $e
+                        .removeClass className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right'
+                        .removeAttr self.options.delayAttr
                 , delay + self.options.transitionTime + 10
+
+        # removing classes and attributes from parent wrapper
+        setTimeout =>
+            $wrapper
+                .removeClass 'scroll-appeared scroll-appear'
+                .removeAttr 'data-scroll-appear data-scroll-appeared'
+        , maxDelay + self.options.transitionTime + 10
 
         @
 
