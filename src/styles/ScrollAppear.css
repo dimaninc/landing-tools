@@ -1,5 +1,5 @@
-.scroll-appear .scroll-appear-simple,
-[data-scroll-appear] .scroll-appear-simple {
+.scroll-appear .scroll-appear-from-bottom,
+[data-scroll-appear] .scroll-appear-from-bottom {
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -54,8 +54,20 @@
   -ms-transform: translateX(50%);
   transform: translateX(50%);
 }
-.scroll-appeared .scroll-appear-simple,
-[data-scroll-appeared="true"] .scroll-appear-simple {
+.scroll-appear .scroll-appear-simple,
+[data-scroll-appear] .scroll-appear-simple {
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  -webkit-transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  -moz-transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  -o-transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  -ms-transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  transition: opacity 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  will-change: opacity;
+}
+.scroll-appeared .scroll-appear-from-bottom,
+[data-scroll-appeared="true"] .scroll-appear-from-bottom {
   opacity: 1;
   -ms-filter: none;
   filter: none;
@@ -83,4 +95,10 @@
   -o-transform: translateX(0);
   -ms-transform: translateX(0);
   transform: translateX(0);
+}
+.scroll-appeared .scroll-appear-simple,
+[data-scroll-appeared="true"] .scroll-appear-simple {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
 }

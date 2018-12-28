@@ -89,7 +89,7 @@ class ScrollAppear
                 delay > maxDelay and maxDelay = delay
                 setTimeout =>
                     $e
-                        .removeClass className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right'
+                        .removeClass className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right scroll-appear-from-bottom'
                         .removeAttr self.options.delayAttr
                 , delay + self.options.transitionTime + 10
 

@@ -113,7 +113,7 @@ ScrollAppear = (function() {
       delay > maxDelay && (maxDelay = delay);
       return setTimeout((function(_this) {
         return function() {
-          return $e.removeClass(className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right').removeAttr(self.options.delayAttr);
+          return $e.removeClass(className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right scroll-appear-from-bottom').removeAttr(self.options.delayAttr);
         };
       })(this), delay + self.options.transitionTime + 10);
     });
