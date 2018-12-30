@@ -10,6 +10,7 @@ class ScrollAppear
             eventClass: '.scrollappear' # class added to events
             transitionTime: 500 # ms
         , options
+        @finishingAttr = 'sa--finishing'
         @count = @getElements().length
         @countLoaded = 0
         @cssClasses = {}
@@ -68,7 +69,10 @@ class ScrollAppear
     getElements: -> $ @getFullSelector()
 
     finishElement: ($wrapper) ->
+        return @ if $wrapper.attr @finishingAttr
+
         self = @
+        $wrapper.attr @finishingAttr, true
         defaultFinish = ($el) -> $el.attr('data-scroll-appeared', 'true').data 'scroll-appeared', true
 
         if typeof @options.onFinish is 'string'
@@ -97,7 +101,8 @@ class ScrollAppear
         setTimeout =>
             $wrapper
                 .removeClass 'scroll-appeared scroll-appear'
-                .removeAttr 'data-scroll-appear data-scroll-appeared'
+                .removeAttr 'data-scroll-appear data-scroll-appeared ' + @finishingAttr
+            @stepDone()
         , maxDelay + self.options.transitionTime + 10
 
         @
@@ -116,7 +121,5 @@ class ScrollAppear
         scrollBreakPoint = @window.scrollTop() + @window.height() / @options.windowHeightFactor
         @getElements().each ->
             $wrapper = $ @
-            if scrollBreakPoint >= $wrapper.offset().top
-                self.finishElement $wrapper
-                self.stepDone()
+            self.finishElement $wrapper if scrollBreakPoint >= $wrapper.offset().top
         @

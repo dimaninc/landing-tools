@@ -13,6 +13,7 @@ ScrollAppear = (function() {
       eventClass: '.scrollappear',
       transitionTime: 500
     }, options);
+    this.finishingAttr = 'sa--finishing';
     this.count = this.getElements().length;
     this.countLoaded = 0;
     this.cssClasses = {};
@@ -94,7 +95,11 @@ ScrollAppear = (function() {
 
   ScrollAppear.prototype.finishElement = function($wrapper) {
     var defaultFinish, finish, maxDelay, self;
+    if ($wrapper.attr(this.finishingAttr)) {
+      return this;
+    }
     self = this;
+    $wrapper.attr(this.finishingAttr, true);
     defaultFinish = function($el) {
       return $el.attr('data-scroll-appeared', 'true').data('scroll-appeared', true);
     };
@@ -119,7 +124,8 @@ ScrollAppear = (function() {
     });
     setTimeout((function(_this) {
       return function() {
-        return $wrapper.removeClass('scroll-appeared scroll-appear').removeAttr('data-scroll-appear data-scroll-appeared');
+        $wrapper.removeClass('scroll-appeared scroll-appear').removeAttr('data-scroll-appear data-scroll-appeared ' + _this.finishingAttr);
+        return _this.stepDone();
       };
     })(this), maxDelay + self.options.transitionTime + 10);
     return this;
@@ -146,8 +152,7 @@ ScrollAppear = (function() {
       var $wrapper;
       $wrapper = $(this);
       if (scrollBreakPoint >= $wrapper.offset().top) {
-        self.finishElement($wrapper);
-        return self.stepDone();
+        return self.finishElement($wrapper);
       }
     });
     return this;
