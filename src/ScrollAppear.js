@@ -17,13 +17,18 @@ ScrollAppear = (function() {
     this.count = this.getElements().length;
     this.countLoaded = 0;
     this.cssClasses = {};
-    this.setupDelays().go();
+    this.setupDelays().setupWindowEvents();
     setTimeout((function(_this) {
       return function() {
         return _this.worker();
       };
     })(this), 10);
   }
+
+  ScrollAppear.prototype.undoSetupWindowEvents = function() {
+    this.window.off(this.options.eventClass);
+    return this;
+  };
 
   ScrollAppear.prototype.setupDelays = function() {
     var self, styles;
@@ -68,8 +73,14 @@ ScrollAppear = (function() {
     return name;
   };
 
-  ScrollAppear.prototype.go = function() {
-    this.window.on('scroll' + this.options.eventClass, (function(_this) {
+  ScrollAppear.prototype.setupWindowEvents = function() {
+    var events;
+    events = ['scroll', 'resize', 'orientationchange'].map((function(_this) {
+      return function(e) {
+        return e + _this.options.eventClass;
+      };
+    })(this));
+    this.window.on(events.join(' '), (function(_this) {
       return function() {
         return _this.worker();
       };

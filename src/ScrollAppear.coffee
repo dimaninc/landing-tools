@@ -16,11 +16,15 @@ class ScrollAppear
         @cssClasses = {}
 
         @setupDelays()
-        .go()
+        .setupWindowEvents()
 
         setTimeout =>
             @worker()
         , 10
+
+    undoSetupWindowEvents: ->
+        @window.off @options.eventClass
+        @
 
     setupDelays: ->
         self = @
@@ -54,8 +58,13 @@ class ScrollAppear
 
         name
 
-    go: ->
-        @window.on 'scroll' + @options.eventClass, => @worker()
+    setupWindowEvents: ->
+        events = [
+            'scroll'
+            'resize'
+            'orientationchange'
+        ].map (e) => e + @options.eventClass
+        @window.on events.join(' '), => @worker()
         @
 
     getSuffix: ->
