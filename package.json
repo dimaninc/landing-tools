@@ -9,5 +9,8 @@
   "private": false,
   "dependencies": {
     "zepto": "^1.2.0"
+  },
+  "devDependencies": {
+    "uglify-js": "^3.12.4"
   }
 }

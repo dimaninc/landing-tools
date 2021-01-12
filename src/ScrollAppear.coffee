@@ -9,6 +9,7 @@ class ScrollAppear
             delayAttr: 'data-appear-delay' # attribute to watch for delay appear
             eventClass: '.scrollappear' # class added to events
             transitionTime: 500 # ms
+            additionalCommonDelay: 0 # additional delay to all elements
         , options
         @finishingAttr = 'sa--finishing'
         @count = @getElements().length
@@ -37,7 +38,7 @@ class ScrollAppear
         $('head').append '<style type="text/css">' + styles.join('\n') + '</style>'
         @
 
-    getElementDelay: ($e) -> @parseDelay $e.attr @options.delayAttr
+    getElementDelay: ($e) -> @parseDelay($e.attr @options.delayAttr) + @options.additionalCommonDelay
 
     parseDelay: (delay) ->
         return 0 unless delay

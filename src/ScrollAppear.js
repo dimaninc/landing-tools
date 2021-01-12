@@ -11,7 +11,8 @@ ScrollAppear = (function() {
       windowHeightFactor: 1.5,
       delayAttr: 'data-appear-delay',
       eventClass: '.scrollappear',
-      transitionTime: 500
+      transitionTime: 500,
+      additionalCommonDelay: 0
     }, options);
     this.finishingAttr = 'sa--finishing';
     this.count = this.getElements().length;
@@ -47,7 +48,7 @@ ScrollAppear = (function() {
   };
 
   ScrollAppear.prototype.getElementDelay = function($e) {
-    return this.parseDelay($e.attr(this.options.delayAttr));
+    return this.parseDelay($e.attr(this.options.delayAttr)) + this.options.additionalCommonDelay;
   };
 
   ScrollAppear.prototype.parseDelay = function(delay) {
