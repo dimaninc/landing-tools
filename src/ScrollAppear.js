@@ -48,7 +48,7 @@ ScrollAppear = (function() {
   };
 
   ScrollAppear.prototype.getElementDelay = function($e) {
-    return this.parseDelay($e.attr(this.options.delayAttr)) + this.options.additionalCommonDelay;
+    return this.parseDelay($e.attr(this.options.delayAttr)) + Number(this.options.additionalCommonDelay) * 1000;
   };
 
   ScrollAppear.prototype.parseDelay = function(delay) {

@@ -38,7 +38,7 @@ class ScrollAppear
         $('head').append '<style type="text/css">' + styles.join('\n') + '</style>'
         @
 
-    getElementDelay: ($e) -> @parseDelay($e.attr @options.delayAttr) + @options.additionalCommonDelay
+    getElementDelay: ($e) -> @parseDelay($e.attr @options.delayAttr) + Number(@options.additionalCommonDelay) * 1000
 
     parseDelay: (delay) ->
         return 0 unless delay
