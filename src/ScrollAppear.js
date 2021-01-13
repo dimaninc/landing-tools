@@ -4,11 +4,13 @@ var ScrollAppear;
 ScrollAppear = (function() {
   function ScrollAppear(options) {
     this.window = $(window);
+    this.appearClasses = ['scroll-appear-simple', 'scroll-appear-bg', 'scroll-appear-from-left', 'scroll-appear-from-right', 'scroll-appear-from-bottom'];
     this.options = $.extend({
       selector: '[data-scroll-appear]',
       selectorSuffixForNonAppeared: null,
       onFinish: null,
       windowHeightFactor: 1.5,
+      defaultAppearClass: 'scroll-appear-simple',
       delayAttr: 'data-appear-delay',
       eventClass: '.scrollappear',
       transitionTime: 500,
@@ -38,6 +40,7 @@ ScrollAppear = (function() {
       var $e;
       $e = $(this);
       $e.addClass(self.getDelayCssClassName($e));
+      self.addDefaultAppearClassIfNeeded($e);
       return true;
     });
     styles = $.map(this.cssClasses, function(value, className) {
@@ -61,6 +64,24 @@ ScrollAppear = (function() {
       delay = 1000 * parseFloat('0' + delay);
     }
     return delay;
+  };
+
+  ScrollAppear.prototype.addDefaultAppearClassIfNeeded = function($e) {
+    var c, exists, i, len, ref;
+    exists = false;
+    ref = this.appearClasses;
+    for (i = 0, len = ref.length; i < len; i++) {
+      c = ref[i];
+      if ($e.hasClass(c)) {
+        exists = true;
+        break;
+      }
+    }
+    c = this.options.defaultAppearClass || this.appearClasses[0];
+    if (!exists) {
+      $e.addClass(c);
+    }
+    return this;
   };
 
   ScrollAppear.prototype.getDelayCssClassName = function($e) {
@@ -130,7 +151,7 @@ ScrollAppear = (function() {
       delay > maxDelay && (maxDelay = delay);
       return setTimeout((function(_this) {
         return function() {
-          return $e.removeClass(className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right scroll-appear-from-bottom').removeAttr(self.options.delayAttr);
+          return $e.removeClass(_this.appearClasses.concat([className]).join(' ')).removeAttr(self.options.delayAttr);
         };
       })(this), delay + self.options.transitionTime + 10);
     });

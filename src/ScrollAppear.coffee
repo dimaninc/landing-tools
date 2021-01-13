@@ -1,11 +1,19 @@
 class ScrollAppear
     constructor: (options) ->
         @window = $ window
+        @appearClasses = [
+            'scroll-appear-simple'
+            'scroll-appear-bg'
+            'scroll-appear-from-left'
+            'scroll-appear-from-right'
+            'scroll-appear-from-bottom'
+        ]
         @options = $.extend
             selector: '[data-scroll-appear]' # selector of parent elements, use '.scroll-appear' if you want to depend on classes
             selectorSuffixForNonAppeared: null # if finish is a string then it becomes ':not(.appeared)'
             onFinish: null # if string then a class name added (use 'scroll-appeared'), if callback, it is called, if null - default callback called
             windowHeightFactor: 1.5
+            defaultAppearClass: 'scroll-appear-simple' # used if css class not specified
             delayAttr: 'data-appear-delay' # attribute to watch for delay appear
             eventClass: '.scrollappear' # class added to events
             transitionTime: 500 # ms
@@ -33,6 +41,7 @@ class ScrollAppear
         .each ->
             $e = $ @
             $e.addClass self.getDelayCssClassName $e
+            self.addDefaultAppearClassIfNeeded $e
             true
         styles = $.map @cssClasses, (value, className) -> ".#{className}{#{value}!important}"
         $('head').append '<style type="text/css">' + styles.join('\n') + '</style>'
@@ -47,6 +56,16 @@ class ScrollAppear
         else
             delay = 1000 * parseFloat '0' + delay
         delay
+
+    addDefaultAppearClassIfNeeded: ($e) ->
+        exists = false
+        for c in @appearClasses
+            if $e.hasClass c
+                exists = true
+                break
+        c = @options.defaultAppearClass or @appearClasses[0]
+        $e.addClass c unless exists
+        @
 
     getDelayCssClassName: ($e) ->
         delay = @getElementDelay $e
@@ -103,8 +122,8 @@ class ScrollAppear
                 delay > maxDelay and maxDelay = delay
                 setTimeout =>
                     $e
-                        .removeClass className + ' scroll-appear-simple scroll-appear-bg scroll-appear-from-left scroll-appear-from-right scroll-appear-from-bottom'
-                        .removeAttr self.options.delayAttr
+                    .removeClass @appearClasses.concat([className]).join(' ')
+                    .removeAttr self.options.delayAttr
                 , delay + self.options.transitionTime + 10
 
         # removing classes and attributes from parent wrapper
