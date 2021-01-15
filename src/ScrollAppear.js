@@ -151,7 +151,7 @@ ScrollAppear = (function() {
       delay > maxDelay && (maxDelay = delay);
       return setTimeout((function(_this) {
         return function() {
-          return $e.removeClass(_this.appearClasses.concat([className]).join(' ')).removeAttr(self.options.delayAttr);
+          return $e.removeClass(self.appearClasses.concat([className]).join(' ')).removeAttr(self.options.delayAttr);
         };
       })(this), delay + self.options.transitionTime + 10);
     });

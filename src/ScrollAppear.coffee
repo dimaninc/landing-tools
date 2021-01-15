@@ -122,7 +122,7 @@ class ScrollAppear
                 delay > maxDelay and maxDelay = delay
                 setTimeout =>
                     $e
-                    .removeClass @appearClasses.concat([className]).join(' ')
+                    .removeClass self.appearClasses.concat([className]).join(' ')
                     .removeAttr self.options.delayAttr
                 , delay + self.options.transitionTime + 10
 
