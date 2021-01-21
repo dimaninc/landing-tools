@@ -13,6 +13,7 @@ class ScrollAppear
             selectorSuffixForNonAppeared: null # if finish is a string then it becomes ':not(.appeared)'
             onFinish: null # if string then a class name added (use 'scroll-appeared'), if callback, it is called, if null - default callback called
             windowHeightFactor: 1.5
+            bottomHeightFactor: 1.15
             defaultAppearClass: 'scroll-appear-simple' # used if css class not specified
             delayAttr: 'data-appear-delay' # attribute to watch for delay appear
             eventClass: '.scrollappear' # class added to events
@@ -148,7 +149,8 @@ class ScrollAppear
     worker: ->
         self = @
         scrollBreakPoint = @window.scrollTop() + @window.height() / @options.windowHeightFactor
+        isBottom = @window.scrollTop() >= $(document).height() - @window.height() * @options.bottomHeightFactor
         @getElements().each ->
             $wrapper = $ @
-            self.finishElement $wrapper if scrollBreakPoint >= $wrapper.offset().top
+            self.finishElement $wrapper if isBottom or scrollBreakPoint >= $wrapper.offset().top
         @

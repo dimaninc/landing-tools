@@ -10,6 +10,7 @@ ScrollAppear = (function() {
       selectorSuffixForNonAppeared: null,
       onFinish: null,
       windowHeightFactor: 1.5,
+      bottomHeightFactor: 1.15,
       defaultAppearClass: 'scroll-appear-simple',
       delayAttr: 'data-appear-delay',
       eventClass: '.scrollappear',
@@ -178,13 +179,14 @@ ScrollAppear = (function() {
   };
 
   ScrollAppear.prototype.worker = function() {
-    var scrollBreakPoint, self;
+    var isBottom, scrollBreakPoint, self;
     self = this;
     scrollBreakPoint = this.window.scrollTop() + this.window.height() / this.options.windowHeightFactor;
+    isBottom = this.window.scrollTop() >= $(document).height() - this.window.height() * this.options.bottomHeightFactor;
     this.getElements().each(function() {
       var $wrapper;
       $wrapper = $(this);
-      if (scrollBreakPoint >= $wrapper.offset().top) {
+      if (isBottom || scrollBreakPoint >= $wrapper.offset().top) {
         return self.finishElement($wrapper);
       }
     });
